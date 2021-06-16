@@ -10,24 +10,20 @@ console.log(`===================env=======================`)
 module.exports = {
   publicPath: process.env.NODE_ENV.includes('serve')
   ? '/'
-  : '/restcountries/',
-  outputDir: 'restcountries',
+  : '/oauth/',
+  outputDir: 'oauth',
   "transpileDependencies": [
     "vuetify"
   ],
   lintOnSave: process.env.NODE_ENV !== 'development',
   devServer: {
+    disableHostCheck: true,
     headers: { "Access-Control-Allow-Origin": "*" },
     overlay: {
       warnings: true,
       errors: true
     },
     proxy:{
-      '/rest': {
-        target: 'https://restcountries.eu/',
-        changeOrigin: true,
-        logLevel: "debug"
-      }
     }
   },
   chainWebpack: config => {
