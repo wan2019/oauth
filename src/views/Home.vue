@@ -5,6 +5,7 @@
       </v-col>
       <div class="testBox">
         <GoogleSigninButton @sign-in="getToken" ></GoogleSigninButton>
+        <LogoutButton></LogoutButton>
       </div>
     </v-row>
   </v-container>
@@ -12,43 +13,35 @@
 
 <script>
 import GoogleSigninButton from '@/components/general/GoogleSigninButton.vue'
+import LogoutButton from '../components/general/LogoutButton.vue'
 
 export default {
   name: 'Home',
   components: {
-    GoogleSigninButton
+    GoogleSigninButton,
+    LogoutButton
   },
   data() {
     return {
     }
   },
   created() {
-    // this.getList()
   },
   methods: {
     getToken(val) {
-      console.log('this my id', val);
+      console.log('id_token', val);
 
     },
-    getList () {
-      $api.testGet('v2/all').then(resp => {
-        const { data } = resp
-        console.log('data', data[0])
-        this.desserts = (data)? data : []
-      })
-    },
-    getNameList () {
-      // if (!this.search) return
-      // $api.testGet(`v2/name/eesti`).then(resp => {
-      //   const { data } = resp
-      //   console.log('data', data[0])
-      //   this.desserts = (data)? data : []
-      // })
-    },
-    openDialog (item) {
-      console.log('open dialog');
-      this.item = item
-      this.dialog = true
+    async oAuthSignIn(provider, id_token) {
+      try {
+        await this.$store.dispatch('oAuthLogin', {
+          provider,
+          id_token
+        });
+        this.$emit('submit');
+      } catch (error) {
+        console.error(error);
+      }
     }
   },
 }
